@@ -22,7 +22,7 @@ abstract class Controller
 
     protected function access()
     {
-        if (!method_exists($this, $this->methodName)) {
+        if (!method_exists($this, $this->methodName) {
             $this->view->error = 'Доступ закрыт';
             $this->view->display(__DIR__ . '/templates/pages/403.php');
             die;
