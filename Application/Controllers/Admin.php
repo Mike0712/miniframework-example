@@ -15,18 +15,20 @@ class Admin extends Controller
     {
         $all = Article::findAll();
         $this->view->all = $all;
-        $this->view->display(__DIR__ . '/../templates/pages/admin.php');
+        $this->view->page = $_GET['page'] ?: 1; // Для реализации пагинации
+        $this->view->displayTwig('admin.html');
     }
 
     public function actionInsert()
-    { // Т.к. форма пустая, передавать в неё нечего
-        $this->view->display(__DIR__ . '/../templates/forms/insert.php');
+    {
+        $this->view->data = null; // Передавать нам нечего, но должно что-то быть передано, например пустой массив или null
+        $this->view->displayTwig('insert.html');
     }
 
     public function actionEdit()
     {
         $this->view->data = Article::findById($_GET['id']);
-        $this->view->display(__DIR__ . '/../templates/forms/edit.php');
+        $this->view->displayTwig('edit.html');
     }
 
     public function actionSave()
@@ -38,7 +40,7 @@ class Admin extends Controller
             header('Location: /admin/');
         } catch (MultiException $e) {
             $this->view->errors = $e;
-            $this->view->display(__DIR__ . '/../templates/forms/insert.php');
+            $this->view->displayTwig('insert.html');
         }
     }
 

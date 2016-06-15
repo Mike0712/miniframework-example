@@ -1,0 +1,64 @@
+{% extends 'back.html' %}
+{% block content %}
+<div class="container">
+
+    <div class="blog-header">
+        <h1 class="blog-title">Админ-панель</h1>
+
+
+        <h2><a href="/controllers/admin/insert">добавить новость</a></h2>
+
+
+    </div>
+
+    <hr>
+    {% set articles =  attribute(all | batch(5), page-1) %}
+    {% for item in articles %}
+    <div class="row">
+        <div class="col-sm-3 col-sm-offset-0 blog-sidebar">
+            <div class="sidebar-module sidebar-module-inset">
+                <h4>Заголовок</h4>
+
+                <p>{{ item.title }}</p>
+            </div>
+        </div>
+        <div class="col-sm-3 col-sm-offset-0 blog-sidebar">
+            <div class="sidebar-module sidebar-module-inset">
+                <h4>Содержание</h4>
+
+                <p>{{ item.lead[:120] }}</p>
+            </div>
+        </div>
+        <div class="col-sm-3 col-sm-offset-0 blog-sidebar">
+            <div class="sidebar-module sidebar-module-inset">
+                <h4>Автор</h4>
+
+                <p>{{ item.author.author | default('Нет автора') }}</p>
+            </div>
+        </div>
+        <div class="col-sm-2 col-sm-offset-0 blog-sidebar">
+            <div class="sidebar-module sidebar-module-inset">
+                <h4>Действие</h4>
+
+                <p><a href="/controllers/admin/edit/?id={{item.id}}">Редактировать</a></p>
+
+                <p><a href="/controllers/admin/delete/?id={{item.id}}">Удалить</a></p>
+            </div>
+        </div>
+
+    </div>
+    {% else %}
+    <p>Пока статей нет!<p>
+    {% endfor %}
+
+</div>
+{% endblock%}
+
+{% block nav %}
+<nav>
+    <ul class="pager">
+        {% import 'pagination.html' as pagination %}
+        {{ pagination.pagination(all | batch(5) | length, page, '/controllers/admin/base/') }}
+    </ul>
+</nav>
+{% endblock %}
